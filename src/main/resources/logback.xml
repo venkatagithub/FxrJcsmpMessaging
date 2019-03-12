@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d [%t] %5p %logger{0}:%L - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="DAILY_FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>c:\\logs\\fxr\\messaging.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>c:\\logs\\fxr\\messaging.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- keep # days' worth of history -->
+			<maxHistory>3</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d [%t] %5p %logger{0}:%L - %m%n</pattern>
+			<!-- <Pattern>%d [%thread] %-5level %logger{35} - %L - %msg%n</Pattern> -->
+		</encoder>
+	</appender>
+
+	<appender name="AUDIT_LOGS"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>../logs/messaging.audit.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>../logs/messaging.audit.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<!-- keep # days worth of history -->
+			<maxHistory>5</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d [%t] %5p %logger{0}:%L - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger
+		name="com.cibc.wss.fxr.adapter.common.AuditLogger"
+		level="INFO" additivity="false">
+		<appender-ref ref="AUDIT_LOGS" />
+	</logger>
+
+	<logger name="com.cibc.wss.fxr.fxrmessaging.solcache.ConfigurationListener"
+		level="INFO" additivity="false">
+		<appender-ref ref="AUDIT_LOGS" />
+	</logger>
+  
+	<logger name="com.solacesystems" level="ERROR" />
+	<logger name="ca.cibcwb.mit" level="ERROR" /> 
+	<logger name="org.springframework" level="ERROR" />
+	<logger name="ch.qos" level="ERROR" />
+	<logger name="ch.qos.logback" level="ERROR" />
+ 
+ 
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="DAILY_FILE" />
+	</root>
+</configuration>
